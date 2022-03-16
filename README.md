@@ -1,5 +1,5 @@
 # f1bot
-A simple discord bot that returns the amount of time remaining till the next Formula 1 session.
+A simple discord bot that returns data about the upcoming Formula 1 session.
 
 ### Usage
 
@@ -14,8 +14,8 @@ A simple discord bot that returns the amount of time remaining till the next For
   
 ### More commands coming soon!
   
-* `+f2` : returns the amount of till the next Formula 2 session.
-* `+f3` : returns the amount of till the next Formula 3 session.
+* `+f2` : returns data about the upcoming Formula 2 session.
+* `+f3` : returns data about the upcoming Formula 3 session.
 * `+remind (f1/f2/f3)` : functions as a reminder, notifies the user of the upcoming race session by tagging their @username.
 
 ### Shortcomings
