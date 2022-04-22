@@ -7,9 +7,9 @@ A simple discord bot that returns data about the upcoming Formula 1 session.
 
 * Use any of the specified commands:
 
-*`+f1` : returns data about the upcoming Formula 1 session.
-*`+f2` : returns data about the upcoming Formula 2 session.
-*`+f3` : returns data about the upcoming Formula 3 session.
+* `+f1` : returns data about the upcoming Formula 1 session.
+* `+f2` : returns data about the upcoming Formula 2 session.
+* `+f3` : returns data about the upcoming Formula 3 session.
 
 * Example: 
 
