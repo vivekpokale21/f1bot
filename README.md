@@ -1,5 +1,5 @@
 # f1bot
-A simple discord bot that returns data about the upcoming Formula 1 session.
+A simple discord bot that returns data about the upcoming Formula 1/2/3 session.
 
 ### Usage
 
