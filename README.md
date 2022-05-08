@@ -3,7 +3,7 @@ A simple discord bot that returns data about the upcoming Formula 1/2/3 session.
 
 ### Usage
 
-* [Invite](https://discord.com/api/oauth2/authorize?client_id=951889203581579304&permissions=34628298864&scope=bot) the bot to your server. 
+* [Invite](https://discord.com/api/oauth2/authorize?client_id=951889203581579304&permissions=274878294080&scope=bot) the bot to your server. 
 
 * Use any of the specified commands:
 
