@@ -1,0 +1,1 @@
+worker: java -jar f1bot.jar

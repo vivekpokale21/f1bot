@@ -3,10 +3,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+
 import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 class f1 {
     ZonedDateTime z;
@@ -25,70 +29,52 @@ public class Commands extends ListenerAdapter {
             try {
                 ArrayList<f1> events = eventList.f1events();
                 ZonedDateTime current = ZonedDateTime.now();
-                int start = 0;
                 Duration diff = null;
-                for (i = start; i < events.size(); i++) {
-                    if (current.isBefore(events.get(i).z)) {
-                        diff = Duration.between(current, events.get(i).z);
+                long st = System.nanoTime();
+                Iterator<f1> i = events.iterator();
+                f1 temp = null;
+                while (i.hasNext()) {
+                    temp = i.next();
+                    if (current.isAfter(temp.z)) i.remove();
+                    else {
+                        diff = Duration.between(current, temp.z);
                         break;
                     }
                 }
-                long s = diff.toSecondsPart();
-                long d = diff.toDaysPart();
-                long h = diff.toHoursPart();
-                long m = diff.toMinutesPart();
-                if(d!=0){timeToGo = d + " Days " + h + " Hours " + m + " Minutes " + s + " Seconds ";}
-                else timeToGo = h + " Hours " + m + " Minutes " + s + " Seconds ";
-
-                eventName = events.get(i).event;
-                gpName = events.get(i).race;
-                EmbedBuilder e = new EmbedBuilder();
-                e.setTitle("Next Formula 1 Event");
-                e.addField("Event Name", gpName, true);
-                if (Commands.gpName.contains("Bahrain")) {location="Sakhir";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1ed.png");}
-                else if (Commands.gpName.contains("Saudi")) {location="Jeddah";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f8-1f1e6.png");}
-                else if (Commands.gpName.contains("Australia")) {location="Melbourne";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1fa.png");}
-                else if (Commands.gpName.contains("Emilia")) {location="Imola";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ee-1f1f9.png");}
-                else if (Commands.gpName.contains("Miami")) {location="Miami Gardens";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1fa-1f1f8.png");}
-                else if (Commands.gpName.contains("Spanish")) {location="Barcelona";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ea-1f1f8.png");}
-                else if (Commands.gpName.contains("Monaco")) {location="Monte-Carlo";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f2-1f1e8.png");}
-                else if (Commands.gpName.contains("Azerbaijan")) {location="Baku";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1ff.png");}
-                else if (Commands.gpName.contains("Canadian")) {location="Montréal";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e8-1f1e6.png");}
-                else if (Commands.gpName.contains("British")) {location="Silverstone";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ec-1f1e7.png");}
-                else if (Commands.gpName.contains("Austrian")) {location="Spielberg";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1f9.png");}
-                else if (Commands.gpName.contains("French")) {location="Le Castellet";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1eb-1f1f7.png");}
-                else if (Commands.gpName.contains("Hungarian")) {location="Budapest";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ed-1f1fa.png");}
-                else if (Commands.gpName.contains("Belgian")) {location="Spa-Francorchamps";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1ea.png");}
-                else if (Commands.gpName.contains("Dutch")) {location="Zandvoort";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f3-1f1f1.png");}
-                else if (Commands.gpName.contains("Singapore")) {location="Marina Bay";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f8-1f1ec.png");}
-                else if (Commands.gpName.contains("Japanese")) {location="Suzuka";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ef-1f1f5.png");}
-                else if (Commands.gpName.contains("United States")) {location="Austin";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1fa-1f1f8.png");}
-                else if (Commands.gpName.contains("Mexico")) {location="Mexico City";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f2-1f1fd.png");}
-                else if (Commands.gpName.contains("Brazilian")) {location="Sao Paolo";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1f7.png");}
-                else{location="Yas Marina";e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1ea.png");}
-
-                e.addField("Location",location,true);
-                e.addField("Session Name", eventName, false);
-                e.addField("Time to Go",timeToGo, false);
-                e.setColor(0xff69ed);
-                e.setFooter("Created by Vivek Pokale");
-
-                event.getChannel().sendMessageEmbeds(e.build()).queue();
-                e.clear();
+                long time = System.nanoTime() - st;
+                event.getChannel().sendMessage("Search Time:" + time + "ns").queue();
+                if(diff!=null) {
+                    long s = diff.toSecondsPart();
+                    long d = diff.toDaysPart();
+                    long h = diff.toHoursPart();
+                    long m = diff.toMinutesPart();
+                    if (d != 0) {
+                        timeToGo = d + " Days " + h + " Hours " + m + " Minutes " + s + " Seconds ";
+                    } else timeToGo = h + " Hours " + m + " Minutes " + s + " Seconds ";
+                    eventName = temp.event;
+                    gpName = temp.race;
+                    EmbedBuilder e = new EmbedBuilder();
+                    e.setTitle("Next Formula 1 Event");
+                    new embed().buildEmbed(event, e);
+                }else event.getChannel().sendMessage("No race events found. This may be because most sessions are still TBC and start times will only be confirmed closer to event date.").queue();
             } catch (FileNotFoundException e) {e.printStackTrace();}
         }
         if(args[0].equalsIgnoreCase(f1bot.prefix+"f2")){
             try {
                 ArrayList<f1> events = eventList.f2events();
                 ZonedDateTime current = ZonedDateTime.now();
-                int start = 0;
                 Duration diff = null;
-                for (i = start; i < events.size(); i++) {
-                    if (current.isBefore(events.get(i).z)) {
-                        diff = Duration.between(current, events.get(i).z);
+                Iterator<f1> i = events.iterator();
+                f1 temp=null;
+                while (i.hasNext()) {
+                    temp = i.next();
+                    if (current.isAfter(temp.z)) i.remove();
+                    else {
+                        diff = Duration.between(current, temp.z);
                         break;
                     }
                 }
+
                 EmbedBuilder e = new EmbedBuilder();
                 if(diff!=null) {
                     long s = diff.toSecondsPart();
@@ -97,98 +83,31 @@ public class Commands extends ListenerAdapter {
                     long m = diff.toMinutesPart();
                     if(d!=0){timeToGo = d + " Days " + h + " Hours " + m + " Minutes " + s + " Seconds ";}
                     else timeToGo = h + " Hours " + m + " Minutes " + s + " Seconds ";
-                    eventName = events.get(i).event;
-                    gpName = events.get(i).race;
+                    eventName = temp.event;
+                    gpName = temp.race;
                     e.setTitle("Next Formula 2 Event");
-                    e.addField("Event Name", gpName, true);
-                    if (Commands.gpName.contains("Bahrain")) {
-                        location = "Sakhir";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1ed.png");
-                    } else if (Commands.gpName.contains("Saudi")) {
-                        location = "Jeddah";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f8-1f1e6.png");
-                    } else if (Commands.gpName.contains("Australia")) {
-                        location = "Melbourne";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1fa.png");
-                    } else if (Commands.gpName.contains("Emilia")) {
-                        location = "Imola";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ee-1f1f9.png");
-                    } else if (Commands.gpName.contains("Miami")) {
-                        location = "Miami Gardens";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1fa-1f1f8.png");
-                    } else if (Commands.gpName.contains("Spanish")) {
-                        location = "Barcelona";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ea-1f1f8.png");
-                    } else if (Commands.gpName.contains("Monaco")) {
-                        location = "Monte-Carlo";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f2-1f1e8.png");
-                    } else if (Commands.gpName.contains("Azerbaijan")) {
-                        location = "Baku";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1ff.png");
-                    } else if (Commands.gpName.contains("Canadian")) {
-                        location = "Montréal";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e8-1f1e6.png");
-                    } else if (Commands.gpName.contains("British")) {
-                        location = "Silverstone";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ec-1f1e7.png");
-                    } else if (Commands.gpName.contains("Austrian")) {
-                        location = "Spielberg";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1f9.png");
-                    } else if (Commands.gpName.contains("French")) {
-                        location = "Le Castellet";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1eb-1f1f7.png");
-                    } else if (Commands.gpName.contains("Hungarian")) {
-                        location = "Budapest";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ed-1f1fa.png");
-                    } else if (Commands.gpName.contains("Belgian")) {
-                        location = "Spa-Francorchamps";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1ea.png");
-                    } else if (Commands.gpName.contains("Dutch")) {
-                        location = "Zandvoort";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f3-1f1f1.png");
-                    } else if (Commands.gpName.contains("Singapore")) {
-                        location = "Marina Bay";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f8-1f1ec.png");
-                    } else if (Commands.gpName.contains("Japanese")) {
-                        location = "Suzuka";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ef-1f1f5.png");
-                    } else if (Commands.gpName.contains("United States")) {
-                        location = "Austin";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1fa-1f1f8.png");
-                    } else if (Commands.gpName.contains("Mexico")) {
-                        location = "Mexico City";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f2-1f1fd.png");
-                    } else if (Commands.gpName.contains("Brazilian")) {
-                        location = "Sao Paolo";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1f7.png");
-                    } else {
-                        location = "Yas Marina";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1ea.png");
-                    }
-
-                    e.addField("Location", location, true);
-                    e.addField("Session Name", eventName, false);
-                    e.addField("Time to Go", timeToGo, false);
-                    e.setColor(0xff69ed);
-                    e.setFooter("Created by Vivek Pokale");
-
-                    event.getChannel().sendMessageEmbeds(e.build()).queue();
+                    new embed().buildEmbed(event, e);
                 } else event.getChannel().sendMessage("No race events found. This may be because most sessions are still TBC and start times will only be confirmed closer to event date.").queue();
                 e.clear();
             } catch (FileNotFoundException e) {e.printStackTrace();}
         }
         if(args[0].equalsIgnoreCase(f1bot.prefix+"f3")){
             try {
+                long st = System.nanoTime();
                 ArrayList<f1> events = eventList.f3events();
                 ZonedDateTime current = ZonedDateTime.now();
-                int start = 0;
                 Duration diff = null;
-                for (i = start; i < events.size(); i++) {
-                    if (current.isBefore(events.get(i).z)) {
-                        diff = Duration.between(current, events.get(i).z);
+                Iterator<f1> i = events.iterator();
+                f1 temp=null;
+                while (i.hasNext()) {
+                    temp = i.next();
+                    if (current.isAfter(temp.z)) i.remove();
+                    else {
+                        diff = Duration.between(current, temp.z);
                         break;
                     }
                 }
+                System.out.println(System.nanoTime()-st);
                 EmbedBuilder e = new EmbedBuilder();
                 if(diff!=null) {
                     long s = diff.toSecondsPart();
@@ -197,86 +116,100 @@ public class Commands extends ListenerAdapter {
                     long m = diff.toMinutesPart();
                     if(d!=0){timeToGo = d + " Days " + h + " Hours " + m + " Minutes " + s + " Seconds ";}
                     else timeToGo = h + " Hours " + m + " Minutes " + s + " Seconds ";
-                    eventName = events.get(i).event;
-                    gpName = events.get(i).race;
+                    eventName = temp.event;
+                    gpName = temp.race;
                     e.setTitle("Next Formula 3 Event");
-                    e.addField("Event Name", gpName, true);
-                    if (Commands.gpName.contains("Bahrain")) {
-                        location = "Sakhir";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1ed.png");
-                    } else if (Commands.gpName.contains("Saudi")) {
-                        location = "Jeddah";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f8-1f1e6.png");
-                    } else if (Commands.gpName.contains("Australia")) {
-                        location = "Melbourne";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1fa.png");
-                    } else if (Commands.gpName.contains("Emilia")) {
-                        location = "Imola";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ee-1f1f9.png");
-                    } else if (Commands.gpName.contains("Miami")) {
-                        location = "Miami Gardens";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1fa-1f1f8.png");
-                    } else if (Commands.gpName.contains("Spanish")) {
-                        location = "Barcelona";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ea-1f1f8.png");
-                    } else if (Commands.gpName.contains("Monaco")) {
-                        location = "Monte-Carlo";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f2-1f1e8.png");
-                    } else if (Commands.gpName.contains("Azerbaijan")) {
-                        location = "Baku";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1ff.png");
-                    } else if (Commands.gpName.contains("Canadian")) {
-                        location = "Montréal";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e8-1f1e6.png");
-                    } else if (Commands.gpName.contains("British")) {
-                        location = "Silverstone";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ec-1f1e7.png");
-                    } else if (Commands.gpName.contains("Austrian")) {
-                        location = "Spielberg";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1f9.png");
-                    } else if (Commands.gpName.contains("French")) {
-                        location = "Le Castellet";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1eb-1f1f7.png");
-                    } else if (Commands.gpName.contains("Hungarian")) {
-                        location = "Budapest";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ed-1f1fa.png");
-                    } else if (Commands.gpName.contains("Belgian")) {
-                        location = "Spa-Francorchamps";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1ea.png");
-                    } else if (Commands.gpName.contains("Dutch")) {
-                        location = "Zandvoort";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f3-1f1f1.png");
-                    } else if (Commands.gpName.contains("Singapore")) {
-                        location = "Marina Bay";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f8-1f1ec.png");
-                    } else if (Commands.gpName.contains("Japanese")) {
-                        location = "Suzuka";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1ef-1f1f5.png");
-                    } else if (Commands.gpName.contains("United States")) {
-                        location = "Austin";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1fa-1f1f8.png");
-                    } else if (Commands.gpName.contains("Mexico")) {
-                        location = "Mexico City";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1f2-1f1fd.png");
-                    } else if (Commands.gpName.contains("Brazilian")) {
-                        location = "Sao Paolo";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e7-1f1f7.png");
-                    } else {
-                        location = "Yas Marina";
-                        e.setThumbnail("https://images.emojiterra.com/twitter/v13.1/512px/1f1e6-1f1ea.png");
-                    }
-
-                    e.addField("Location", location, true);
-                    e.addField("Session Name", eventName, false);
-                    e.addField("Time to Go", timeToGo, false);
-                    e.setColor(0xff69ed);
-                    e.setFooter("Created by Vivek Pokale");
-
-                    event.getChannel().sendMessageEmbeds(e.build()).queue();
+                    new embed().buildEmbed(event, e);
                 }
                 else event.getChannel().sendMessage("No race events found. This may be because most sessions are still TBC and start times will only be confirmed closer to event date.").queue();
                 e.clear();
             } catch (FileNotFoundException e) {e.printStackTrace();}
+        }
+        else if(args[0].equalsIgnoreCase(f1bot.prefix+"remind") && args[1]!=null){
+            f1 temp = null;
+            ArrayList<f1> events;
+            try {
+                ZonedDateTime current = ZonedDateTime.now();
+                if (args[1].equalsIgnoreCase("f3")) {
+                    events = eventList.f3events();
+                    Duration diff = null;
+                    Iterator<f1> i = events.iterator();
+                    while (i.hasNext()) {
+                        temp = i.next();
+                        if (current.isAfter(temp.z)) i.remove();
+                        else {
+                            diff = Duration.between(current, temp.z);
+                            break;
+                        }
+                    }
+                    long ms = diff.toMillis() - 300000;
+                    event.getChannel().sendMessage("Reminder set for " + temp.event + " , " + temp.race).queue();
+                    f1 finalTemp = temp;
+                    TimerTask f3 = new TimerTask() {
+                        @Override
+                        public void run() {
+                            event.getChannel().sendMessage(event.getAuthor().getAsMention() + " " + finalTemp.event + " for " + finalTemp.race + " is starting now!").queue();
+                            event.getChannel().sendMessage("https://giphy.com/gifs/mercedesamgf1-K8ZEMzkfkNAuz8OdBG").queue();
+                        }
+                    };
+                    Timer t = new Timer();
+                    t.schedule(f3, ms);
+                }
+                if (args[1].equalsIgnoreCase("f1")) {
+                    long st = System.nanoTime();
+                    events = eventList.f1events();
+                    Duration diff = null;
+                    Iterator<f1> i = events.iterator();
+                    while (i.hasNext()) {
+                        temp = i.next();
+                        if (current.isAfter(temp.z)) i.remove();
+                        else {
+                            diff = Duration.between(current, temp.z);
+                            break;
+                        }
+                    }
+                    long ms = diff.toMillis() - 300000;
+                    event.getChannel().sendMessage("Reminder set for " + temp.event + ", " + temp.race).queue();
+                    f1 finalTemp = temp;
+                    TimerTask f1 = new TimerTask() {
+                        @Override
+                        public void run() {
+                            event.getChannel().sendMessage(event.getAuthor().getAsMention() + " " + finalTemp.event + " for " + finalTemp.race + " is starting now!").queue();
+                            event.getChannel().sendMessage("https://giphy.com/gifs/mercedesamgf1-K8ZEMzkfkNAuz8OdBG").queue();
+                        }
+                    };
+                    Timer t = new Timer();
+                    t.schedule(f1, ms);
+                    System.out.println((System.nanoTime() - st) / 1000000.000 + " ms");
+                }
+                if (args[1].equalsIgnoreCase("f2")) {
+                        events = eventList.f2events();
+                        Duration diff = null;
+                        Iterator<f1> i = events.iterator();
+                        while (i.hasNext()) {
+                            temp = i.next();
+                            if (current.isAfter(temp.z)) i.remove();
+                            else {
+                                diff = Duration.between(current, temp.z);
+                                break;
+                            }
+                        }
+                        long ms = diff.toMillis() - 300000;
+                        event.getChannel().sendMessage("Reminder set for " + temp.event + ", " + temp.race).queue();
+                    f1 finalTemp = temp;
+                    TimerTask f1 = new TimerTask() {
+                            @Override
+                            public void run() {
+                                event.getChannel().sendMessage(event.getAuthor().getAsMention() + " " + finalTemp.event + " for " + finalTemp.race + " is starting now!").queue();
+                                event.getChannel().sendMessage("https://giphy.com/gifs/mercedesamgf1-K8ZEMzkfkNAuz8OdBG").queue();
+                            }
+                        };
+                        Timer t = new Timer();
+                        t.schedule(f1, ms);
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
         /*else if(args[0].equalsIgnoreCase(f1bot.prefix+"standings")){
             try {
