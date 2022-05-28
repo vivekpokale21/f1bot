@@ -10,7 +10,7 @@ A simple discord bot that returns data about the upcoming Formula 1/2/3 session.
 * `+f1` : returns data about the upcoming Formula 1 session.
 * `+f2` : returns data about the upcoming Formula 2 session.
 * `+f3` : returns data about the upcoming Formula 3 session.
-* `+remind f1/f2/f3` : functions as a reminder, notifies the user of the upcoming race session by tagging their @username.
+* `+remind f1/f2/f3` : functions as a reminder, notifies the user of the upcoming race session by tagging their @username 5 minutes before the start of a session.
 
 * Example: 
 
