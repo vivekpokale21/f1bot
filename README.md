@@ -1,5 +1,5 @@
 # f1bot
-A simple discord bot that returns data about the upcoming Formula 1/2/3 session.
+A simple discord bot that returns data about the upcoming Formula 1/2/3 session. Hosted on Heroku.
 
 ### Usage
 
@@ -10,6 +10,7 @@ A simple discord bot that returns data about the upcoming Formula 1/2/3 session.
 * `+f1` : returns data about the upcoming Formula 1 session.
 * `+f2` : returns data about the upcoming Formula 2 session.
 * `+f3` : returns data about the upcoming Formula 3 session.
+* `+remind f1/f2/f3` : functions as a reminder, notifies the user of the upcoming race session by tagging their @username.
 
 * Example: 
 
@@ -18,11 +19,7 @@ A simple discord bot that returns data about the upcoming Formula 1/2/3 session.
   
 ### Coming Soon
 
-* `+remind (f1/f2/f3)` : functions as a reminder, notifies the user of the upcoming race session by tagging their @username.
-
-### Shortcomings
-  
-~* As of now, no permanent solution exists for hosting the bot 24/7. However, it is in the process of being resolved as soon as possible.~
+* `+standings` : returns current points standings for the drivers' and constructors' championships.
   
 ### Built With
 
