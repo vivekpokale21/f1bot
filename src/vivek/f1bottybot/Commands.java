@@ -23,16 +23,48 @@ class f1 {
 }
 public class Commands extends ListenerAdapter {
     public static String timeToGo,eventName,gpName,location;int i;
+    ArrayList<f1> f1events,f2events,f3events; static long time;
+    public Commands() throws FileNotFoundException{
+        f1events = eventList.f1events();
+        f2events = eventList.f2events();
+        f3events = eventList.f3events();
+    }
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        ZonedDateTime current = ZonedDateTime.now();
         String[] args = event.getMessage().getContentRaw().split("\\s+");
+        Iterator<f1> i = null;
+        if(args[0].equalsIgnoreCase(f1bot.prefix+"remind")&&args[1]!=null){
+            if(args[1].equalsIgnoreCase("f1")) i = f1events.iterator();
+            else if(args[1].equalsIgnoreCase("f2")) i = f2events.iterator();
+            else if(args[1].equalsIgnoreCase("f3")) i = f3events.iterator();
+            Duration diff = null;
+            f1 temp = null;
+            while (i.hasNext()) {
+                temp = i.next();
+                if (current.isAfter(temp.z)) i.remove();
+                else {
+                    diff = Duration.between(current, temp.z);
+                    break;
+                }
+            }
+            long ms = diff.toMillis() - 300000;
+            event.getChannel().sendMessage("Reminder set for " + temp.event + " for the " + temp.race).queue();
+            f1 finalTemp = temp;
+            TimerTask timer = new TimerTask() {
+                @Override
+                public void run() {
+                    event.getChannel().sendMessage(event.getAuthor().getAsMention() + " " + finalTemp.event + " for " + finalTemp.race + " is starting now!").queue();
+                    event.getChannel().sendMessage("https://giphy.com/gifs/mercedesamgf1-K8ZEMzkfkNAuz8OdBG").queue();
+                }
+            };
+            Timer t = new Timer();
+            t.schedule(timer, ms);
+        }
         if(args[0].equalsIgnoreCase(f1bot.prefix+"f1")){
-            try {
-                ArrayList<f1> events = eventList.f1events();
-                ZonedDateTime current = ZonedDateTime.now();
                 Duration diff = null;
                 long st = System.nanoTime();
-                Iterator<f1> i = events.iterator();
                 f1 temp = null;
+                i = f1events.iterator();
                 while (i.hasNext()) {
                     temp = i.next();
                     if (current.isAfter(temp.z)) i.remove();
@@ -41,31 +73,25 @@ public class Commands extends ListenerAdapter {
                         break;
                     }
                 }
-                long time = System.nanoTime() - st;
-                event.getChannel().sendMessage("Search Time:" + time + "ns").queue();
+                time = System.nanoTime() - st;
                 if(diff!=null) {
                     long s = diff.toSecondsPart();
                     long d = diff.toDaysPart();
                     long h = diff.toHoursPart();
                     long m = diff.toMinutesPart();
-                    if (d != 0) {
-                        timeToGo = d + " Days " + h + " Hours " + m + " Minutes " + s + " Seconds ";
-                    } else timeToGo = h + " Hours " + m + " Minutes " + s + " Seconds ";
+                    if (d != 0) {timeToGo = d + " Days " + h + " Hours " + m + " Minutes " + s + " Seconds ";}
+                    else timeToGo = h + " Hours " + m + " Minutes " + s + " Seconds ";
                     eventName = temp.event;
                     gpName = temp.race;
                     EmbedBuilder e = new EmbedBuilder();
                     e.setTitle("Next Formula 1 Event");
                     new embed().buildEmbed(event, e);
                 }else event.getChannel().sendMessage("No race events found. This may be because most sessions are still TBC and start times will only be confirmed closer to event date.").queue();
-            } catch (FileNotFoundException e) {e.printStackTrace();}
         }
         if(args[0].equalsIgnoreCase(f1bot.prefix+"f2")){
-            try {
-                ArrayList<f1> events = eventList.f2events();
-                ZonedDateTime current = ZonedDateTime.now();
                 Duration diff = null;
-                Iterator<f1> i = events.iterator();
                 f1 temp=null;
+                i= f2events.iterator();
                 while (i.hasNext()) {
                     temp = i.next();
                     if (current.isAfter(temp.z)) i.remove();
@@ -74,7 +100,6 @@ public class Commands extends ListenerAdapter {
                         break;
                     }
                 }
-
                 EmbedBuilder e = new EmbedBuilder();
                 if(diff!=null) {
                     long s = diff.toSecondsPart();
@@ -89,15 +114,11 @@ public class Commands extends ListenerAdapter {
                     new embed().buildEmbed(event, e);
                 } else event.getChannel().sendMessage("No race events found. This may be because most sessions are still TBC and start times will only be confirmed closer to event date.").queue();
                 e.clear();
-            } catch (FileNotFoundException e) {e.printStackTrace();}
         }
         if(args[0].equalsIgnoreCase(f1bot.prefix+"f3")){
-            try {
                 long st = System.nanoTime();
-                ArrayList<f1> events = eventList.f3events();
-                ZonedDateTime current = ZonedDateTime.now();
                 Duration diff = null;
-                Iterator<f1> i = events.iterator();
+                i = f3events.iterator();
                 f1 temp=null;
                 while (i.hasNext()) {
                     temp = i.next();
@@ -108,108 +129,24 @@ public class Commands extends ListenerAdapter {
                     }
                 }
                 System.out.println(System.nanoTime()-st);
-                EmbedBuilder e = new EmbedBuilder();
-                if(diff!=null) {
-                    long s = diff.toSecondsPart();
-                    long d = diff.toDaysPart();
-                    long h = diff.toHoursPart();
-                    long m = diff.toMinutesPart();
-                    if(d!=0){timeToGo = d + " Days " + h + " Hours " + m + " Minutes " + s + " Seconds ";}
-                    else timeToGo = h + " Hours " + m + " Minutes " + s + " Seconds ";
-                    eventName = temp.event;
-                    gpName = temp.race;
-                    e.setTitle("Next Formula 3 Event");
-                    new embed().buildEmbed(event, e);
+                if(args[0].equalsIgnoreCase(f1bot.prefix+"f3")) {
+                    EmbedBuilder e = new EmbedBuilder();
+                    if (diff != null) {
+                        long s = diff.toSecondsPart();
+                        long d = diff.toDaysPart();
+                        long h = diff.toHoursPart();
+                        long m = diff.toMinutesPart();
+                        if (d != 0) {
+                            timeToGo = d + " Days " + h + " Hours " + m + " Minutes " + s + " Seconds ";
+                        } else timeToGo = h + " Hours " + m + " Minutes " + s + " Seconds ";
+                        eventName = temp.event;
+                        gpName = temp.race;
+                        e.setTitle("Next Formula 3 Event");
+                        new embed().buildEmbed(event, e);
+                    } else
+                        event.getChannel().sendMessage("No race events found. This may be because most sessions are still TBC and start times will only be confirmed closer to event date.").queue();
+                    e.clear();
                 }
-                else event.getChannel().sendMessage("No race events found. This may be because most sessions are still TBC and start times will only be confirmed closer to event date.").queue();
-                e.clear();
-            } catch (FileNotFoundException e) {e.printStackTrace();}
-        }
-        else if(args[0].equalsIgnoreCase(f1bot.prefix+"remind") && args[1]!=null){
-            f1 temp = null;
-            ArrayList<f1> events;
-            try {
-                ZonedDateTime current = ZonedDateTime.now();
-                if (args[1].equalsIgnoreCase("f3")) {
-                    events = eventList.f3events();
-                    Duration diff = null;
-                    Iterator<f1> i = events.iterator();
-                    while (i.hasNext()) {
-                        temp = i.next();
-                        if (current.isAfter(temp.z)) i.remove();
-                        else {
-                            diff = Duration.between(current, temp.z);
-                            break;
-                        }
-                    }
-                    long ms = diff.toMillis() - 300000;
-                    event.getChannel().sendMessage("Reminder set for " + temp.event + " , " + temp.race).queue();
-                    f1 finalTemp = temp;
-                    TimerTask f3 = new TimerTask() {
-                        @Override
-                        public void run() {
-                            event.getChannel().sendMessage(event.getAuthor().getAsMention() + " " + finalTemp.event + " for " + finalTemp.race + " is starting now!").queue();
-                            event.getChannel().sendMessage("https://giphy.com/gifs/mercedesamgf1-K8ZEMzkfkNAuz8OdBG").queue();
-                        }
-                    };
-                    Timer t = new Timer();
-                    t.schedule(f3, ms);
-                }
-                if (args[1].equalsIgnoreCase("f1")) {
-                    long st = System.nanoTime();
-                    events = eventList.f1events();
-                    Duration diff = null;
-                    Iterator<f1> i = events.iterator();
-                    while (i.hasNext()) {
-                        temp = i.next();
-                        if (current.isAfter(temp.z)) i.remove();
-                        else {
-                            diff = Duration.between(current, temp.z);
-                            break;
-                        }
-                    }
-                    long ms = diff.toMillis() - 300000;
-                    event.getChannel().sendMessage("Reminder set for " + temp.event + ", " + temp.race).queue();
-                    f1 finalTemp = temp;
-                    TimerTask f1 = new TimerTask() {
-                        @Override
-                        public void run() {
-                            event.getChannel().sendMessage(event.getAuthor().getAsMention() + " " + finalTemp.event + " for " + finalTemp.race + " is starting now!").queue();
-                            event.getChannel().sendMessage("https://giphy.com/gifs/mercedesamgf1-K8ZEMzkfkNAuz8OdBG").queue();
-                        }
-                    };
-                    Timer t = new Timer();
-                    t.schedule(f1, ms);
-                    System.out.println((System.nanoTime() - st) / 1000000.000 + " ms");
-                }
-                if (args[1].equalsIgnoreCase("f2")) {
-                        events = eventList.f2events();
-                        Duration diff = null;
-                        Iterator<f1> i = events.iterator();
-                        while (i.hasNext()) {
-                            temp = i.next();
-                            if (current.isAfter(temp.z)) i.remove();
-                            else {
-                                diff = Duration.between(current, temp.z);
-                                break;
-                            }
-                        }
-                        long ms = diff.toMillis() - 300000;
-                        event.getChannel().sendMessage("Reminder set for " + temp.event + ", " + temp.race).queue();
-                    f1 finalTemp = temp;
-                    TimerTask f1 = new TimerTask() {
-                            @Override
-                            public void run() {
-                                event.getChannel().sendMessage(event.getAuthor().getAsMention() + " " + finalTemp.event + " for " + finalTemp.race + " is starting now!").queue();
-                                event.getChannel().sendMessage("https://giphy.com/gifs/mercedesamgf1-K8ZEMzkfkNAuz8OdBG").queue();
-                            }
-                        };
-                        Timer t = new Timer();
-                        t.schedule(f1, ms);
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
         }
         /*else if(args[0].equalsIgnoreCase(f1bot.prefix+"standings")){
             try {
@@ -236,13 +173,13 @@ public class Commands extends ListenerAdapter {
         else if(args[0].equalsIgnoreCase(f1bot.prefix+"sunnyka")){event.getChannel().sendMessage("9GPA never forget").queue();}
         else if(args[0].equalsIgnoreCase(f1bot.prefix+"tatu")){event.getChannel().sendMessage("The best thing that's ever happened to little v").queue();}
         else if(args[0].equalsIgnoreCase(f1bot.prefix+"all")) {
-            try {
-                ArrayList<f1> events = eventList.f1events(); String all="";
-                for (i=0;i<events.size()/2;i++) {all+=events.get(i).race+" "+events.get(i).event+"\n";}
-                event.getChannel().sendMessage(all).queue(); all="";
-                for (i=events.size()/2+1;i<events.size();i++) {all+=events.get(i).race+" "+events.get(i).event+"\n";}
-                event.getChannel().sendMessage(all).queue();
-            } catch (FileNotFoundException e) {e.printStackTrace();}
+            int j=0;String all = "";
+            i= f1events.iterator();
+            while(j<7){
+                f1 temp=i.next();
+                all+= temp.race;j++;
+            }
+            event.getChannel().sendMessage(all).queue();
         }
         else if(args[0].equalsIgnoreCase(f1bot.prefix+"invite")){event.getChannel().sendMessage("https://discord.com/api/oauth2/authorize?client_id=951889203581579304&permissions=34628298864&scope=bot").queue();}
         else if(args[0].equalsIgnoreCase(f1bot.prefix+"vansh")){event.getChannel().sendMessage("bhai kis chutiye ka naam le liya").queue();}

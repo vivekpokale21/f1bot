@@ -4,10 +4,12 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import javax.security.auth.login.LoginException;
+import java.io.FileNotFoundException;
+
 public class f1bot {
     public static JDA jda;
     public static String prefix ="+";
-    public static void main(String[] args) throws LoginException {
+    public static void main(String[] args) throws LoginException, FileNotFoundException {
         jda = JDABuilder.createDefault(Token.token).build();
         jda.getPresence().setStatus(OnlineStatus.IDLE);
         jda.getPresence().setActivity(Activity.watching("T's life unfold"));

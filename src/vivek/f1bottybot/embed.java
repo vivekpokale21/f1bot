@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import static vivek.f1bottybot.Commands.*;
 
 public class embed extends ListenerAdapter{
-    void buildEmbed(MessageReceivedEvent event, EmbedBuilder e){
+    public void buildEmbed(MessageReceivedEvent event, EmbedBuilder e){
         e.addField("Event Name", gpName, true);
         if (gpName.contains("Bahrain")) {
             location = "Sakhir";
@@ -78,7 +78,7 @@ public class embed extends ListenerAdapter{
         e.addField("Session Name", eventName, false);
         e.addField("Time to Go", timeToGo, false);
         e.setColor(0xff69ed);
-        e.setFooter("Created by Vivek Pokale");
+        e.setFooter("Vivek Pokale | Search Time: "+Commands.time+" ns");
 
         event.getChannel().sendMessageEmbeds(e.build()).queue();
 
