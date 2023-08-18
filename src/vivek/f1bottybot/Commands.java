@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ class f1 {
 public class Commands extends ListenerAdapter {
     public static String timeToGo,eventName,gpName,location;int i;
     ArrayList<f1> f1events,f2events,f3events; static long time;
-    public Commands() throws FileNotFoundException{
+    public Commands() throws IOException {
         f1events = eventList.f1events();
         f2events = eventList.f2events();
         f3events = eventList.f3events();
@@ -148,22 +149,35 @@ public class Commands extends ListenerAdapter {
                     e.clear();
                 }
         }
-        /*else if(args[0].equalsIgnoreCase(f1bot.prefix+"standings")){
-            try {
-                WebClient w = new WebClient();
-                w.getOptions().setCssEnabled(false);
-                w.getOptions().setJavaScriptEnabled(false);
-                String url = "https://www.formula1.com/en/results.html/2022/drivers.html";
-                HtmlPage page = w.getPage(url);
-                HtmlTable table = page.getHtmlElementById("resultsarchive-table");
-                for (HtmlTableRow row : table.getRows()) {
-                    System.out.println("Found row");
-                    for (final HtmlTableCell cell : row.getCells()) {
-                        System.out.println("   Found cell: " + cell.asNormalizedText());
-                    }
-                }
-            } catch (IOException e) {e.printStackTrace();}
-        }*/
+        else if(args[0].equalsIgnoreCase(f1bot.prefix+"drivers")){
+            ArrayList<driverTeamDetails> std = standings.scrapedrivers();
+            EmbedBuilder e = new EmbedBuilder();
+            String name ="", country ="",team ="", pts ="";
+            for (int c=0;c<std.size();c++) {
+                name = name+std.get(c).name+"\n";
+                //country=country+std.get(c).country+"\n";
+                team=team+std.get(c).team+"\n";
+                pts = pts+ std.get(c).pts +"\n";
+            }
+            e.addField("Driver",name,true);
+            e.addField("Team",team,true);
+            e.addField("Points",pts,true);
+            e.setColor(0xff69ed);
+            event.getChannel().sendMessageEmbeds(e.build()).queue();e.clear();
+        }
+        else if(args[0].equalsIgnoreCase(f1bot.prefix+"teams")){
+            ArrayList<driverTeamDetails> std = standings.scrapeteams();
+            EmbedBuilder e = new EmbedBuilder();
+            String team ="", pts ="";
+            for (int c=0;c<std.size();c++) {
+                team=team+std.get(c).team+"\n";
+                pts = pts+ std.get(c).pts +"\n";
+            }
+            e.addField("Team",team,true);
+            e.addField("Points",pts,true);
+            e.setColor(0xff69ed);
+            event.getChannel().sendMessageEmbeds(e.build()).queue();e.clear();
+        }
         else if(args[0].equalsIgnoreCase(f1bot.prefix+"anmol")){event.getChannel().sendMessage("you mean *professor* anmol?").queue();}
         else if(args[0].equalsIgnoreCase(f1bot.prefix+"sans")){
             event.getChannel().sendMessage(":regional_indicator_o::regional_indicator_m::regional_indicator_g::regional_indicator_o::regional_indicator_s::regional_indicator_h:\n" +
