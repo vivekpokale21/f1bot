@@ -16,7 +16,7 @@ A simple discord bot that returns data about the upcoming Formula 1/2/3 session.
     <img src="images/Screenshot 2023-10-06 213057.png">
 * `+teams` : returns teams' standings.
   <div align="left">
-    <img src="images/Screenshot 2023-10-06 213057.png">
+    <img src="images/Screenshot 2023-10-06 213136.png">
 
 ### Coming Soon
 
