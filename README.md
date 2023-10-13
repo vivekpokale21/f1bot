@@ -1,5 +1,5 @@
 # f1bot
-A simple discord bot that returns data about the upcoming Formula 1 session. Hosted on AWS.
+A simple discord bot that returns data about Formula 1 sessions of the past and present. Hosted on AWS.
 
 ### Now Live
 * `+gearshifts <year> <race> <session> <driver>` : returns a plot of which gear is being utilised by a driver at different points on the specified track.
