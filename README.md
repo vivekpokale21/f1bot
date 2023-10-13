@@ -4,11 +4,11 @@ A simple discord bot that returns data about the upcoming Formula 1 session. Hos
 ### Now Live
 * `+gearshifts <year> <race> <session> <driver>` : returns a plot of which gear is being utilised by a driver at different points on the specified track.
   <div align="left">
-    <img src="images/Screenshot 2023-10-06 212319.png">
+    <img src="images/gearshifts.png">
 
 * `+teampace <year> <race> ` : returns a box-plot visualizing and ranking each of the 10 teams' race pace.
   <div align="left">
-    <img src="images/Screenshot 2023-10-06 212319.png">
+    <img src="images/teampace.png">
 
 ### Command Usage
 
