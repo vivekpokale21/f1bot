@@ -2,9 +2,14 @@
 A simple discord bot that returns data about Formula 1 sessions of the past and present. Hosted on AWS.
 
 ### Now Live
+
 * `+gearshifts <year> <race> <session> <driver>` : returns a plot of which gear is being utilised by a driver at different points on the specified track.
   <div align="left">
     <img src="images/gearshifts.png">
+
+* `+speedtrace <year> <race> <session> <driver1> <driver2>` : returns the two drivers' speedtraces for the given session, along with annotated corner numbers for comparison.
+  <div align="left">
+    <img src="images/speedtrace.png">
 
 * `+teampace <year> <race> ` : returns a box-plot visualizing and ranking each of the 10 teams' race pace.
   <div align="left">
@@ -37,7 +42,10 @@ A simple discord bot that returns data about Formula 1 sessions of the past and 
 
 * JDK 17
 * JDA
-  
+* Python 3.10
+* discord.py
+* FastF1 
+
 ### Contact
 
 Vivek Pokale - vpokale21@gmail.com
