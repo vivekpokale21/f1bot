@@ -1,7 +1,7 @@
 # f1bot
 A simple discord bot that returns data about Formula 1 sessions of the past and present. Hosted on AWS.
 
-### Now Live
+### Now Live : Data Visualization Commands
 
 * `+gearshifts <year> <race> <session> <driver>` : returns a plot showing which gear is being utilised by a driver at different points on the specified track.
   <div align="left">
@@ -14,6 +14,10 @@ A simple discord bot that returns data about Formula 1 sessions of the past and 
 * `+teampace <year> <race> ` : returns a box-plot visualizing and ranking each of the 10 teams' race pace.
   <div align="left">
     <img src="images/teampace.png">
+    
+* `+racepace <year> <race>` : returns a swarm-plot of the top-10 drivers' laptimes over the given race session.
+  <div align="left">
+    <img src="images/racepace.png">
 
 ### Command Usage
 
@@ -34,9 +38,7 @@ A simple discord bot that returns data about Formula 1 sessions of the past and 
 
 ### Coming Soon
 
-* `+racepace <year> <race>` : returns a swarm-plot of the top-10 drivers' laptimes over the given race session. Uses the FastF1 API
-  <div align="left">
-    <img src="images/Screenshot 2023-10-06 212319.png">
+
   
 ### Built With
 
