@@ -1,5 +1,14 @@
 # f1bot
-A simple discord bot that returns data about the upcoming Formula 1/2/3 session. Hosted on Heroku.
+A simple discord bot that returns data about the upcoming Formula 1 session. Hosted on AWS.
+
+### Now Live
+* `+gearshifts <year> <race> <session> <driver>` : returns a plot of which gear is being utilised by a driver at different points on the specified track.
+  <div align="left">
+    <img src="images/Screenshot 2023-10-06 212319.png">
+
+* `+teampace <year> <race> ` : returns a box-plot visualizing and ranking each of the 10 teams' race pace.
+  <div align="left">
+    <img src="images/Screenshot 2023-10-06 212319.png">
 
 ### Command Usage
 
