@@ -3,7 +3,7 @@ A simple discord bot that returns data about Formula 1 sessions of the past and 
 
 ### Now Live
 
-* `+gearshifts <year> <race> <session> <driver>` : returns a plot of which gear is being utilised by a driver at different points on the specified track.
+* `+gearshifts <year> <race> <session> <driver>` : returns a plot showing which gear is being utilised by a driver at different points on the specified track.
   <div align="left">
     <img src="images/gearshifts.png">
 
