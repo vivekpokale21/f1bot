@@ -1,0 +1,6 @@
+discord.py
+fastf1
+matplotlib
+numpy
+seaborn
+pytz
