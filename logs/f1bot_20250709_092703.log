@@ -1,0 +1,6 @@
+2025-07-09 09:27:03,607 - f1bot - INFO - Starting bot...
+2025-07-09 09:27:05,485 - f1bot - INFO - All extensions loaded
+2025-07-09 09:27:08,294 - f1bot - INFO - Bot is ready. Logged in as F1Bot#9668
+2025-07-09 09:27:08,294 - f1bot - INFO - Bot is in 3 guilds
+2025-07-09 09:27:24,400 - f1bot - INFO - Loading session data for 2025 China R
+2025-07-09 09:27:25,812 - f1bot - ERROR - Error in racepace command: module 'fastf1.plotting' has no attribute 'DRIVER_TRANSLATE'

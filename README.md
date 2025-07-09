@@ -1,53 +1,166 @@
-# f1bot
-A simple discord bot that returns data about Formula 1 sessions of the past and present. Hosted on AWS.
+# F1 Discord Bot
 
-### Now Live : Data Visualization Commands
+A Discord bot that provides Formula 1 data visualization and analysis using the FastF1 API.
 
-* `+gearshifts <year> <race> <session> <driver>` : returns a plot showing which gear is being utilised by a driver at different points on the specified track.
-  <div align="left">
-    <img src="images/gearshifts.png">
+## Features
 
-* `+speedtrace <year> <race> <session> <driver1> <driver2>` : returns the two drivers' speedtraces for the given session, along with annotated corner numbers for comparison.
-  <div align="left">
-    <img src="images/speedtrace.png">
+- **Telemetry Visualization**
+  - Speed trace comparison between drivers
+  - Gear shift visualization on track maps
+  - Track dominance analysis with mini-sectors
 
-* `+teampace <year> <race> ` : returns a box-plot visualizing and ranking each of the 10 teams' race pace.
-  <div align="left">
-    <img src="images/teampace.png">
-    
-* `+racepace <year> <race>` : returns a swarm-plot of the top-10 drivers' laptimes over the given race session.
-  <div align="left">
-    <img src="images/racepace.png">
+- **Race Analysis**
+  - Race pace comparison between drivers
+  - Team pace comparison
+  - Lap section analysis (braking, cornering, acceleration, full throttle)
 
-### Command Usage
+- **Information**
+  - Next F1 event details
+  - Driver standings
+  - Constructor standings
 
-* [Invite](https://discord.com/api/oauth2/authorize?client_id=951889203581579304&permissions=274878294080&scope=bot) the bot to your server. 
+## Setup
 
-* `+f1` : returns data about the upcoming Formula 1 session.
-  <div align="left">
-    <img src="images/Screenshot 2022-03-17 002640.png">
-* `+remind f1` : functions as a reminder, notifies the user of the upcoming race session by @username push-notification 5 minutes before the start of a session.
-  <div align="left">
-    <img src="images/Screenshot 2023-10-06 215150.png">
-* `+drivers` : returns drivers' standings.
-  <div align="left">
-    <img src="images/Screenshot 2023-10-06 213057.png">
-* `+teams` : returns teams' standings.
-  <div align="left">
-    <img src="images/Screenshot 2023-10-06 213136.png">
+### Prerequisites
 
-### Coming Soon
+- Python 3.8 or higher
+- Discord Bot Token
+- Discord Developer Portal access
 
+### Installation
 
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/f1-discord-bot.git
+   cd f1-discord-bot
+   ```
+
+2. Install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Set up your Discord bot token as an environment variable:
+   ```bash
+   # Linux/macOS
+   export token=your_discord_bot_token
+
+   # Windows
+   set token=your_discord_bot_token
+   ```
+
+4. Run the bot:
+   ```bash
+   python bot.py
+   ```
+
+## Usage
+
+The bot uses the prefix `+` for all commands.
+
+### Telemetry Commands
+
+- **Speed Trace Comparison**
+  ```
+  +speedtrace [year] [race] [session] [driver1] [driver2]
+  ```
+  Example: `+speedtrace 2023 Monaco Q VER HAM`
+
+- **Gear Shifts Visualization**
+  ```
+  +gearshifts [year] [race] [session] [driver]
+  ```
+  Example: `+gearshifts 2023 Monaco Q VER`
+
+- **Track Dominance Analysis**
+  ```
+  +trackdominance [year] [race] [session] [driver1] [driver2] [driver3]
+  ```
+  Example: `+trackdominance 2023 Monaco Q VER HAM PER`
   
-### Built With
+  Note: Drivers are optional. If not provided, the top 3 fastest drivers will be used.
 
-* JDK 17
-* JDA
-* Python 3.10
-* discord.py
-* FastF1 
+### Race Analysis Commands
 
-### Contact
+- **Race Pace Comparison**
+  ```
+  +racepace [year] [race]
+  ```
+  Example: `+racepace 2023 Monaco`
 
-Vivek Pokale - vpokale21@gmail.com
+- **Team Pace Comparison**
+  ```
+  +teampace [year] [race]
+  ```
+  Example: `+teampace 2023 Monaco`
+
+- **Lap Sections Analysis**
+  ```
+  +lapsections [year] [race] [session] [driver1] [driver2] ...
+  ```
+  Example: `+lapsections 2023 Monaco Q VER HAM PER`
+  
+  Note: Drivers are optional. If not provided, the top 5 fastest drivers will be used.
+
+### Information Commands
+
+- **Next F1 Event**
+  ```
+  +f1
+  ```
+
+- **Driver Standings**
+  ```
+  +drivers [year]
+  ```
+  Example: `+drivers` or `+drivers 2023`
+
+- **Constructor Standings**
+  ```
+  +constructors [year]
+  ```
+  Example: `+constructors` or `+constructors 2023`
+
+- **Help**
+  ```
+  +help [command]
+  ```
+  Example: `+help` or `+help speedtrace`
+
+## Project Structure
+
+```
+f1-discord-bot/
+├── bot.py                  # Main entry point
+├── config.py               # Configuration
+├── requirements.txt        # Dependencies
+├── README.md               # Documentation
+├── data/                   # Data files
+│   ├── country_flags.json  # Flag data
+│   └── sched.csv           # Schedule data
+├── commands/               # Discord command modules
+│   ├── __init__.py
+│   ├── telemetry.py        # Telemetry commands
+│   ├── race_analysis.py    # Race analysis commands
+│   └── info.py             # Information commands
+├── services/               # Business logic
+│   ├── __init__.py
+│   ├── telemetry_service.py
+│   ├── race_analysis_service.py
+│   ├── standings_service.py
+│   └── schedule_service.py
+└── utils/                  # Utility functions
+    ├── __init__.py
+    ├── logging_setup.py
+    ├── error_handler.py
+    └── embed_builder.py
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [FastF1](https://github.com/theOehrly/Fast-F1) - For providing the F1 data API
+- [discord.py](https://github.com/Rapptz/discord.py) - For the Discord API wrapper
